@@ -33,22 +33,34 @@ and operational traceability.
 
 ## Selected Work
 
-### ATLAS | Data Quality & Observability Platform
+### MIDAS | Financial Data Pipeline · [repo](https://github.com/diegosaaval/midas-data-pipeline)
 
-Configuration-driven platform designed to anticipate source failures,
-compare primary and replicated data, detect anomalies, reuse valid
-results through selective caching and recover interrupted executions
-through checkpointing.
+Daily batch pipeline that turns the raw files of a fintech into trusted gold tables
+(landing → bronze → silver with PySpark → gold with dbt), orchestrated with Airflow.
 
 Key concepts:
 
-- Data quality and observability
-- Configuration-driven source onboarding
-- Selective cache invalidation
-- Checkpoint and recovery
-- Source and replica comparison
-- Historical persistence
-- Executive dashboard
+- Medallion architecture and data contracts
+- Quarantine with reasons, deduplication and late-arriving data
+- Schema evolution and idempotent reprocessing (dynamic partition overwrite)
+- Spark optimization: broadcast joins, partition pruning, window functions, salting for skew
+- Live stage view: per-stage rows, retries, quarantine and Spark explain plans
+- CI with tests, dbt parse, Airflow DAG validation, pip-audit, CodeQL and Docker builds
+
+### ATLAS | Data Quality & Reliability Monitor · [repo](https://github.com/diegosaaval/atlas-data-quality)
+
+Monitor that validates every table as soon as it lands: on time, complete,
+compliant with business rules and behaving as usual. One incident per table,
+with evidence and an escalation email.
+
+Key concepts:
+
+- Availability, weekday-aware volume and schema monitors
+- Business rules created without code and compiled to SQL
+- Statistical outliers with a robust baseline (median, MAD, standard deviation)
+- Incident management with automatic resolution and run links back to the pipeline
+- Connectors to Parquet/CSV sources, local or published by URL
+- AI only explains: deterministic checks decide
 
 ### NEXO | Calendarized Data Pipeline
 
@@ -68,10 +80,10 @@ Key concepts:
 ## Technical Stack
 
 - Languages: Python, SQL
-- Data: Pandas, Impala, Parquet, ETL, batch pipelines
-- Engineering: workflow orchestration, scheduling, data modeling
-- Reliability: data quality, checkpointing, retries, caching, idempotency
-- Tools: Git, Azure DevOps, Streamlit, HTML, Power BI
+- Data: PySpark, dbt, DuckDB, Pandas, Impala, Parquet, ETL, batch pipelines
+- Orchestration and delivery: Apache Airflow, Docker, GitHub Actions (CI/CD), Render
+- Reliability: data quality, data contracts, idempotency, retries, checkpointing, caching
+- Tools: Git, Azure DevOps, FastAPI, Streamlit, HTML, Power BI
 
 ## Engineering Approach
 
@@ -85,12 +97,11 @@ I use Spec-Driven Development for AI-assisted engineering:
 
 ## Current Focus
 
-Currently strengthening:
+Taking MIDAS to AWS:
 
-- Apache Airflow
-- Docker
-- CI/CD
-- AWS fundamentals
+- S3, Glue Catalog and Athena
+- Terraform (least-privilege IAM)
+- dbt on Athena with Apache Iceberg
 
 ## Contact
 
